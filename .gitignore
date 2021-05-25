@@ -1,5 +1,5 @@
 # java
-*.class
+#*.class
 *-d367e379d9-1.jar
 # mvn
 target/
