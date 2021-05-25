@@ -1,6 +1,9 @@
 
 # ysoserial
 
+打包命令
+
+` mvn clean package -DskipTests`
 ### shiro 内存马注入
 
 使用对应链进行生成反序列化文件
