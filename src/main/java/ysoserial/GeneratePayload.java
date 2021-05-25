@@ -20,6 +20,7 @@ public class GeneratePayload {
 		}
 		final String payloadType = args[0];
 		final String command = args[1];
+//        final String command = args.length >1 ? args[1]:null;
 
 		final Class<? extends ObjectPayload> payloadClass = Utils.getPayloadClass(payloadType);
 		if (payloadClass == null) {

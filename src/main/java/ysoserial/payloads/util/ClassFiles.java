@@ -8,7 +8,7 @@ public class ClassFiles {
 	public static String classAsFile(final Class<?> clazz) {
 		return classAsFile(clazz, true);
 	}
-	
+
 	public static String classAsFile(final Class<?> clazz, boolean suffix) {
 		String str;
 		if (clazz.getEnclosingClass() == null) {
@@ -17,9 +17,9 @@ public class ClassFiles {
 			str = classAsFile(clazz.getEnclosingClass(), false) + "$" + clazz.getSimpleName();
 		}
 		if (suffix) {
-			str += ".class";			
+			str += ".class";
 		}
-		return str;  
+		return str;
 	}
 
 	public static byte[] classAsBytes(final Class<?> clazz) {
@@ -40,5 +40,16 @@ public class ClassFiles {
 			throw new RuntimeException(e);
 		}
 	}
-	
+
+
+    public static byte[] readInputStream(InputStream inputStream) throws IOException {
+	    byte[] bytes = new byte[5120];
+	    ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+	    int line = 0;
+	    while ((line=inputStream.read(bytes)) != -1){
+	        outputStream.write(bytes,0,line);
+        }
+	    return outputStream.toByteArray();
+    }
+
 }

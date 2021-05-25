@@ -1,9 +1,9 @@
 # java
 *.class
-
+*-d367e379d9-1.jar
 # mvn
 target/
-
+.DS_Store
 # eclipse
 .classpath
 .project
