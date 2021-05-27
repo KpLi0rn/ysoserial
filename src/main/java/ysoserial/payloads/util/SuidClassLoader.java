@@ -27,7 +27,6 @@ public class SuidClassLoader extends ClassLoader{
         tempFile = File.createTempFile("tempJarFile", "jar");
         FileUtils.writeByteArrayToFile(tempFile, jarByte);
         jarFile = new JarFile(tempFile);
-        // 将 jar 包中的 class 添加到 classByteMap
         readJar(jarFile);
     }
 
@@ -77,7 +76,6 @@ public class SuidClassLoader extends ClassLoader{
                     clazz = super.loadClass(name, resolve);
                 }
             } catch (ClassNotFoundException e) {
-
                 // 3.当自定义ClassLoader中没有找到目标class，再调用系统默认的加载机制,走双亲委派模式
                 clazz = super.loadClass(name, resolve);
             }

