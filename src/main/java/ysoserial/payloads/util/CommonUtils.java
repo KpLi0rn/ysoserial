@@ -4,6 +4,16 @@ import java.io.*;
 
 public class CommonUtils {
 
+    public static String readStringFromInputStream(InputStream inputStream) throws Exception{
+        StringBuilder stringBuilder = new StringBuilder("");
+        byte[] bytes = new byte[1024];
+        int n = 0;
+        while ((n=inputStream.read(bytes)) != -1){
+            stringBuilder.append(new String(bytes,0,n));
+        }
+        return stringBuilder.toString();
+    }
+
     public static byte[] getBytes(String path) throws Exception{
         InputStream inputStream = new FileInputStream(path);
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
