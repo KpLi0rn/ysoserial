@@ -32,15 +32,12 @@ public class SuidClassLoader extends ClassLoader{
 
     private void readJar(JarFile jar) throws IOException, IOException {
         Enumeration<JarEntry> en = jar.entries();
-        // 遍历jar文件所有实体
         while (en.hasMoreElements()){
             JarEntry je = en.nextElement();
             String name = je.getName();
-            // 只class文件进行处理
             if (name.endsWith(".class")){
                 String clss = name.replace(".class", "").replaceAll("/", ".");
                 if(this.findLoadedClass(clss) != null) continue;
-                // 读取class的byte内容
                 InputStream input = jar.getInputStream(je);
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
                 int bufferSize = 4096;
@@ -51,8 +48,6 @@ public class SuidClassLoader extends ClassLoader{
                 }
                 byte[] cc = baos.toByteArray();
                 input.close();
-                // 将class name 和class byte存储到classByteMap
-//                System.out.println(clss);
                 classByteMap.put(clss, cc);
             }
         }
@@ -62,13 +57,11 @@ public class SuidClassLoader extends ClassLoader{
     @Override
     protected Class<?> loadClass(String name, boolean resolve) throws ClassNotFoundException {
         synchronized (getClassLoadingLock(name)) {
-            // 1. 检测自定ClassLoader缓存中有没有，有的话直接返回
             Class clazz = cacheClass.get(name);
-            if (null != clazz) {
+            if (clazz != null) {
                 return clazz;
             }
             try {
-                // 2. 若缓存中没有，就从当前ClassLoader可加载的所有Class中找
                 clazz = findClass(name);
                 if (null != clazz) {
                     cacheClass.put(name, clazz);
@@ -76,7 +69,6 @@ public class SuidClassLoader extends ClassLoader{
                     clazz = super.loadClass(name, resolve);
                 }
             } catch (ClassNotFoundException e) {
-                // 3.当自定义ClassLoader中没有找到目标class，再调用系统默认的加载机制,走双亲委派模式
                 clazz = super.loadClass(name, resolve);
             }
 
@@ -87,10 +79,8 @@ public class SuidClassLoader extends ClassLoader{
         }
     }
 
-    // 根据全限定类名来加载的
     @Override
     protected Class<?> findClass(String name) throws ClassNotFoundException {
-//        System.out.println(name);
         byte[] result = classByteMap.get(name);
         if ( result == null){
             throw new ClassNotFoundException();

